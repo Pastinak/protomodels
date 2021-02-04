@@ -6,7 +6,7 @@
    :synopsis: code to study the approximate analysis, come up with a conservative
               procedure
 
-.. moduleauthor:: Wolfgang Waltenberger <wolfgang.waltenberger@gmail.com> 
+.. moduleauthor:: Wolfgang Waltenberger <wolfgang.waltenberger@gmail.com>
 
 """
 
@@ -17,7 +17,7 @@ import numpy as np
 sys.path.append(os.path.abspath('../smodels'))
 from smodels.tools.physicsUnits import fb
 from smodels.tools import runtime
-from smodels.tools import statistics
+#from smodels.tools import statistics
 from smodels.tools.simplifiedLikelihoods import UpperLimitComputer, Data
 runtime._experimental = True
 import matplotlib.pyplot as plt
@@ -32,21 +32,21 @@ sns.set_palette(sns.color_palette("Paired"))
 
 def likelihood(mu,nsig,nExp,nExpErr,nobs):
     """Marginalized likelihood for mu"""
-    
+
     def integrand(nbg):
         nTot = nbg + mu*nsig
         nErr = nExpErr
         p = stats.poisson.pmf(k=nobs,mu=nTot)*stats.norm.pdf(x=nbg,loc=nExp,scale=nErr)
         return p
-        
+
     #Marginalize over the background uncertainty
     result = integrate.quad(integrand, 0, max(2*(nobs-nExp),nExp+5*nExpErr))
-    
+
     return result[0]
 
 def p(mu,nsig,nExp,nExpErr,nobs):
     """Integral of the likelihood from zero to mu"""
-    
+
     result = integrate.quad(likelihood, 0, mu,args=(nsig,nExp,nExpErr,nobs,))
     return result[0]
 
@@ -118,7 +118,7 @@ def run ( nobs, nExp, nExpErr, nsig ):
     plt.xlabel(r'$\mu$')
     plt.ylabel(r'$L$')
     plt.text(0,llhdsApp[:,1].min(),'$\mu_{max} = %1.2f$\n$\mu_{max}^{app} = %1.2f$' %(mumax,mumaxApp),fontsize=14)
-    plt.title(r'$N_{obs} = %1.2f, N_{bg} = %1.2f \pm %1.2f, \sigma_{UL}^{obs} = %1.2f, \sigma_{UL}^{exp} = %1.2f, \Delta = %1.2f$' 
+    plt.title(r'$N_{obs} = %1.2f, N_{bg} = %1.2f \pm %1.2f, \sigma_{UL}^{obs} = %1.2f, \sigma_{UL}^{exp} = %1.2f, \Delta = %1.2f$'
               %(nobs,nExp,nExpErr,ULobs,ULexp,abs(ULobs-ULexp)/(ULobs+ULexp)),fontsize=14)
     plt.savefig("llhd.png")
     # plt.show()
