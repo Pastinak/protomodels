@@ -15,9 +15,10 @@
 import sys,os,copy,glob,time
 import numpy as np
 sys.path.append(os.path.abspath('../smodels'))
+sys.path.append(os.path.abspath('./smodels'))
 from smodels.tools.physicsUnits import fb
 from smodels.tools import runtime
-#from smodels.tools import statistics
+from smodels.tools import statistics
 from smodels.tools.simplifiedLikelihoods import UpperLimitComputer, Data
 runtime._experimental = True
 import matplotlib.pyplot as plt
